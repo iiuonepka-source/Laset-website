@@ -27,10 +27,10 @@
         <div class="hero-badge"><span class="dot"></span>Free Client</div>
         <h1 class="title">LASET</h1>
         <p class="subtitle">by zov</p>
-        <p class="desc">Бесплатный Minecraft клиент для PvP с современным интерфейсом</p>
+        <p class="desc">Бесплатный Minecraft клиент для PvP</p>
         <div class="hero-btns">
             <a href="#download" class="btn primary">Скачать</a>
-            <a href="https://discord.gg/laset" class="btn secondary">Discord</a>
+            <a href="https://t.me/LasetClient" class="btn secondary">Telegram</a>
         </div>
         <div class="stats">
             <div class="stat"><span class="val">FREE</span><span class="lbl">Навсегда</span></div>
@@ -53,33 +53,20 @@
 
     <section class="download" id="download">
         <h2 class="section-title">Скачать</h2>
-        <p class="section-desc">Выбери свою версию Minecraft</p>
         <div class="download-grid">
             <div class="download-card featured">
                 <div class="version-badge">Новинка</div>
                 <h3>LASET 1.21.4</h3>
-                <p class="version-info">Fabric • Последняя версия</p>
-                <ul class="version-features">
-                    <li>✓ Современный интерфейс</li>
-                    <li>✓ FunTime bypass</li>
-                    <li>✓ Автообновления</li>
-                    <li>✓ Встроенный лаунчер</li>
-                </ul>
-                <a href="#" class="btn primary full" onclick="showAuth('1.21.4')">Скачать Лаунчер</a>
-                <span class="size">~2 MB • Windows</span>
+                <p class="version-info">Fabric • Последняя</p>
+                <ul class="version-features"><li>✓ FunTime bypass</li><li>✓ Автообновления</li><li>✓ Лаунчер</li></ul>
+                <a href="#" class="btn primary full" onclick="showAuth('1.21.4')">Скачать</a>
             </div>
             <div class="download-card">
                 <div class="version-badge alt">Стабильная</div>
                 <h3>LASET 1.16.5</h3>
-                <p class="version-info">Fabric • Проверенная</p>
-                <ul class="version-features">
-                    <li>✓ Проверенный bypass</li>
-                    <li>✓ Легкий клиент</li>
-                    <li>✓ Много серверов</li>
-                    <li>✓ Стабильная работа</li>
-                </ul>
+                <p class="version-info">Forge • Проверенная</p>
+                <ul class="version-features"><li>✓ Проверенный bypass</li><li>✓ Легкий</li><li>✓ Стабильный</li></ul>
                 <a href="#" class="btn secondary full" onclick="showAuth('1.16.5')">Скачать .jar</a>
-                <span class="size">~15 MB • Fabric Mod</span>
             </div>
         </div>
     </section>
@@ -92,51 +79,27 @@
                 <button class="auth-tab active" onclick="switchAuthTab('login')">Вход</button>
                 <button class="auth-tab" onclick="switchAuthTab('register')">Регистрация</button>
             </div>
-            
             <form class="auth-form" id="loginForm">
-                <h3>Вход в аккаунт</h3>
-                <div class="input-group">
-                    <label>UID, Email или Никнейм</label>
-                    <input type="text" id="loginUid" placeholder="Введите UID, email или ник" required>
-                </div>
-                <div class="input-group">
-                    <label>Пароль</label>
-                    <input type="password" id="loginPass" placeholder="Введите пароль" required>
-                </div>
+                <h3>Вход</h3>
+                <div class="input-group"><label>UID / Email / Ник</label><input type="text" id="loginUid" required></div>
+                <div class="input-group"><label>Пароль</label><input type="password" id="loginPass" required></div>
                 <div class="error-msg" id="loginError"></div>
                 <button type="submit" class="btn primary full">Войти</button>
-                <p class="auth-hint">Нет аккаунта? <a href="#" onclick="switchAuthTab('register')">Зарегистрируйся</a></p>
             </form>
-            
             <form class="auth-form hidden" id="registerForm">
                 <h3>Регистрация</h3>
-                <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="regEmail" placeholder="your@email.com" required>
-                </div>
-                <div class="input-group">
-                    <label>Никнейм (будет в игре)</label>
-                    <input type="text" id="regNick" placeholder="Игровой никнейм" maxlength="16" required>
-                </div>
-                <div class="input-group">
-                    <label>Пароль</label>
-                    <input type="password" id="regPass" placeholder="Минимум 6 символов" required>
-                </div>
-                <div class="uid-display">
-                    <span>Твой UID будет:</span>
-                    <span class="uid-value" id="nextUid">загрузка...</span>
-                </div>
+                <div class="input-group"><label>Email</label><input type="email" id="regEmail" required></div>
+                <div class="input-group"><label>Никнейм</label><input type="text" id="regNick" maxlength="16" required></div>
+                <div class="input-group"><label>Пароль</label><input type="password" id="regPass" required></div>
+                <div class="uid-display"><span>Твой UID:</span><span class="uid-value" id="nextUid">...</span></div>
                 <div class="error-msg" id="regError"></div>
                 <button type="submit" class="btn primary full">Зарегистрироваться</button>
-                <p class="auth-hint">Уже есть аккаунт? <a href="#" onclick="switchAuthTab('login')">Войди</a></p>
             </form>
-            
             <div class="auth-success hidden" id="authSuccess">
                 <div class="success-icon">✓</div>
                 <h3>Готово!</h3>
-                <p>Твой UID: <span class="uid-highlight" id="finalUid"></span></p>
-                <p class="success-hint">Используй UID для входа в лаунчер</p>
-                <a href="#" class="btn primary full" id="downloadBtn">Скачать <span id="downloadVersion"></span></a>
+                <p>UID: <span class="uid-highlight" id="finalUid"></span></p>
+                <a href="#" class="btn primary full" id="downloadBtn">Скачать</a>
             </div>
         </div>
     </div>
@@ -149,77 +112,56 @@
                 <div class="user-avatar" id="userAvatar">U</div>
                 <div class="user-info">
                     <h3 id="dashNickname">Player</h3>
-                    <span class="user-uid">UID: <span id="dashUid">0</span></span>
+                    <span class="user-uid">UID: <span id="dashUid">0</span> • <span id="dashRole">user</span></span>
                 </div>
                 <button class="btn-logout" onclick="logout()">Выйти</button>
             </div>
-            
             <div class="dashboard-stats">
                 <div class="dash-stat"><span class="dash-val" id="dashSessions">0</span><span class="dash-lbl">Сессий</span></div>
-                <div class="dash-stat"><span class="dash-val" id="dashPlayTime">0ч</span><span class="dash-lbl">Наиграно</span></div>
                 <div class="dash-stat"><span class="dash-val" id="dashCreated">-</span><span class="dash-lbl">Создан</span></div>
             </div>
-            
             <div class="dashboard-section">
-                <h4>Изменить никнейм</h4>
-                <div class="dash-row">
-                    <input type="text" id="newNickname" placeholder="Новый никнейм" maxlength="16">
-                    <button class="btn primary small" onclick="updateNickname()">Сохранить</button>
-                </div>
+                <h4>Никнейм</h4>
+                <div class="dash-row"><input type="text" id="newNickname" placeholder="Новый ник" maxlength="16"><button class="btn primary small" onclick="updateNickname()">Сохранить</button></div>
             </div>
-            
             <div class="dashboard-section">
-                <h4>Сменить пароль</h4>
-                <div class="dash-row">
-                    <input type="password" id="currentPass" placeholder="Текущий пароль">
-                </div>
-                <div class="dash-row">
-                    <input type="password" id="newPass" placeholder="Новый пароль">
-                    <button class="btn primary small" onclick="updatePassword()">Сменить</button>
-                </div>
+                <h4>Пароль</h4>
+                <div class="dash-row"><input type="password" id="currentPass" placeholder="Текущий"></div>
+                <div class="dash-row"><input type="password" id="newPass" placeholder="Новый"><button class="btn primary small" onclick="updatePassword()">Сменить</button></div>
             </div>
-            
-            <div class="dashboard-section">
-                <h4>HWID</h4>
-                <p class="dash-hint">Сбросить привязку устройства</p>
-                <button class="btn secondary small" onclick="resetHwid()">Сбросить HWID</button>
-            </div>
-            
+            <div class="dashboard-section"><button class="btn secondary small" onclick="resetHwid()">Сбросить HWID</button></div>
             <div class="dash-msg" id="dashMsg"></div>
+            <div id="adminSection" class="hidden">
+                <hr style="border-color:#333;margin:20px 0">
+                <h4 style="color:#5a82ff">⚙️ Админ-панель</h4>
+                <button class="btn primary small" onclick="showAdminPanel()" style="margin-top:10px">Управление юзерами</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content admin-panel">
+            <button class="modal-close" onclick="closeAdmin()">&times;</button>
+            <h3 style="margin-bottom:20px">👑 Админ-панель</h3>
+            <div class="admin-stats" id="adminStats"></div>
+            <div class="admin-search">
+                <input type="text" id="adminSearch" placeholder="Поиск по UID или нику..." oninput="filterUsers()">
+            </div>
+            <div class="admin-users" id="adminUsers"></div>
         </div>
     </div>
 
     <section class="faq" id="faq">
         <h2 class="section-title">FAQ</h2>
         <div class="faq-list">
-            <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q"><span>Клиент бесплатный?</span><span class="faq-icon">+</span></div>
-                <div class="faq-a"><p>Да, LASET полностью бесплатный навсегда.</p></div>
-            </div>
-            <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q"><span>Какую версию выбрать?</span><span class="faq-icon">+</span></div>
-                <div class="faq-a"><p>1.21.4 - для новых серверов. 1.16.5 - для старых.</p></div>
-            </div>
-            <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q"><span>Как установить?</span><span class="faq-icon">+</span></div>
-                <div class="faq-a"><p>1.21.4: Скачай лаунчер и нажми Launch. 1.16.5: Fabric + .jar в mods.</p></div>
-            </div>
-            <div class="faq-item" onclick="this.classList.toggle('open')">
-                <div class="faq-q"><span>Никнейм переносится в игру?</span><span class="faq-icon">+</span></div>
-                <div class="faq-a"><p>Да, никнейм с сайта автоматически используется в игре.</p></div>
-            </div>
+            <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q"><span>Бесплатно?</span><span class="faq-icon">+</span></div><div class="faq-a"><p>Да, навсегда.</p></div></div>
+            <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q"><span>Какую версию?</span><span class="faq-icon">+</span></div><div class="faq-a"><p>1.21.4 для новых серверов, 1.16.5 для старых.</p></div></div>
         </div>
     </section>
 
     <footer class="footer">
-        <div class="footer-top">
-            <span class="logo">LASET</span>
-            <div class="footer-links">
-                <a href="https://discord.gg/laset">Discord</a>
-                <a href="https://t.me/laset">Telegram</a>
-            </div>
-        </div>
-        <p class="copyright">© 2025 LASET • Made by zov</p>
+        <p class="copyright">© 2025 LASET • by zov</p>
     </footer>
 
     <script src="script.js"></script>
