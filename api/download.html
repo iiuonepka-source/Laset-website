@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скачать - LASTED</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="nav">
+        <a href="index.html" class="logo">LASTED</a>
+        <div class="nav-links">
+            <a href="features.html">Функции</a>
+            <a href="download.html" class="active">Скачать</a>
+            <a href="community.html">Сообщество</a>
+            <a href="team.html">Команда</a>
+            <a href="faq.html">FAQ</a>
+            <a href="beta.html" id="betaLink" style="display:none">🧪 Beta</a>
+            <a href="#" class="nav-btn" id="accountBtn" onclick="showAccount()">Войти</a>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="page-header">
+            <h1>Скачать</h1>
+            <p>Выбери версию для своего сервера</p>
+        </div>
+
+        <div class="download-grid">
+            <div class="download-card featured">
+                <div class="version-badge">Новинка</div>
+                <h3>LASTED 1.21.4</h3>
+                <p class="version-info">Fabric • Последняя версия</p>
+                <ul class="version-features">
+                    <li>✓ FunTime bypass</li>
+                    <li>✓ Автообновления</li>
+                    <li>✓ Лаунчер с GUI</li>
+                    <li>✓ Оптимизация</li>
+                </ul>
+                <button class="btn primary full" onclick="showComingSoon()">Скачать лаунчер</button>
+            </div>
+
+            <div class="download-card">
+                <div class="version-badge alt">Стабильная</div>
+                <h3>LASTED 1.16.5</h3>
+                <p class="version-info">Forge • Проверенная</p>
+                <ul class="version-features">
+                    <li>✓ Проверенный bypass</li>
+                    <li>✓ Легкий вес</li>
+                    <li>✓ Стабильная работа</li>
+                    <li>✓ Совместимость</li>
+                </ul>
+                <button class="btn secondary full" onclick="showComingSoon()">Скачать .jar</button>
+            </div>
+        </div>
+
+        <div class="download-info">
+            <h2>Как установить?</h2>
+            <div class="install-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Зарегистрируйся</h4>
+                        <p>Создай аккаунт чтобы получить доступ к скачиванию</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Скачай файл</h4>
+                        <p>Выбери нужную версию и скачай лаунчер или .jar файл</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Запусти</h4>
+                        <p>Открой лаунчер, введи свой UID и наслаждайся игрой</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Auth Modal (same as index.html) -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Вход</button>
+                <button class="auth-tab" onclick="switchAuthTab('register')">Регистрация</button>
+            </div>
+            <form class="auth-form" id="loginForm">
+                <h3>Вход</h3>
+                <div class="input-group"><label>UID / Email / Ник</label><input type="text" id="loginUid" required></div>
+                <div class="input-group"><label>Пароль</label><input type="password" id="loginPass" required></div>
+                <div class="error-msg" id="loginError"></div>
+                <button type="submit" class="btn primary full">Войти</button>
+            </form>
+            <form class="auth-form hidden" id="registerForm">
+                <h3>Регистрация</h3>
+                <div class="input-group"><label>Email</label><input type="email" id="regEmail" required></div>
+                <div class="input-group"><label>Никнейм</label><input type="text" id="regNick" maxlength="16" required></div>
+                <div class="input-group"><label>Пароль</label><input type="password" id="regPass" required></div>
+                <div class="uid-display"><span>Твой UID:</span><span class="uid-value" id="nextUid">...</span></div>
+                <div class="error-msg" id="regError"></div>
+                <button type="submit" class="btn primary full">Зарегистрироваться</button>
+            </form>
+            <div class="auth-success hidden" id="authSuccess">
+                <div class="success-icon">✓</div>
+                <h3>Готово!</h3>
+                <p>UID: <span class="uid-highlight" id="finalUid"></span></p>
+                <a href="#" class="btn primary full" id="downloadBtn">Скачать</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="dashboardModal">
+        <div class="modal-content dashboard">
+            <button class="modal-close" onclick="closeDashboard()">&times;</button>
+            <div class="dashboard-header">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-info">
+                    <h3 id="dashNickname">Player</h3>
+                    <span class="user-uid">UID: <span id="dashUid">0</span> • <span id="dashRole">user</span></span>
+                </div>
+                <button class="btn-logout" onclick="logout()">Выйти</button>
+            </div>
+            <div class="dashboard-stats">
+                <div class="dash-stat"><span class="dash-val" id="dashSessions">0</span><span class="dash-lbl">Сессий</span></div>
+                <div class="dash-stat"><span class="dash-val" id="dashCreated">-</span><span class="dash-lbl">Создан</span></div>
+            </div>
+            <div class="dashboard-section">
+                <h4>Никнейм</h4>
+                <div class="dash-row"><input type="text" id="newNickname" placeholder="Новый ник" maxlength="16"><button class="btn primary small" onclick="updateNickname()">Сохранить</button></div>
+            </div>
+            <div class="dashboard-section">
+                <h4>Пароль</h4>
+                <div class="dash-row"><input type="password" id="currentPass" placeholder="Текущий"></div>
+                <div class="dash-row"><input type="password" id="newPass" placeholder="Новый"><button class="btn primary small" onclick="updatePassword()">Сменить</button></div>
+            </div>
+            <div class="dashboard-section"><button class="btn secondary small" onclick="resetHwid()">Сбросить HWID</button></div>
+            <div class="dash-msg" id="dashMsg"></div>
+            <div id="adminSection" class="hidden">
+                <hr style="border-color:#333;margin:20px 0">
+                <h4 style="color:#5a82ff">⚙️ Админ-панель</h4>
+                <button class="btn primary small" onclick="showAdminPanel()" style="margin-top:10px">Управление юзерами</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="adminModal">
+        <div class="modal-content admin-panel">
+            <button class="modal-close" onclick="closeAdmin()">&times;</button>
+            <h3 style="margin-bottom:20px">👑 Админ-панель</h3>
+            <div class="admin-stats" id="adminStats"></div>
+            <div class="admin-search">
+                <input type="text" id="adminSearch" placeholder="Поиск по UID, нику или email..." oninput="filterUsers()">
+                <select id="roleFilter" onchange="filterUsers()" style="margin-top:10px;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:var(--white);width:100%">
+                    <option value="">Все роли</option>
+                    <option value="admin">Админы</option>
+                    <option value="youtube">YouTube</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="vip">VIP</option>
+                    <option value="beta">Beta</option>
+                    <option value="user">Обычные</option>
+                </select>
+            </div>
+            <div class="admin-users" id="adminUsers"></div>
+        </div>
+    </div>
+
+    <!-- Coming Soon Modal -->
+    <div class="modal" id="comingSoonModal">
+        <div class="modal-content coming-soon">
+            <button class="modal-close" onclick="closeComingSoon()">&times;</button>
+            <div class="coming-soon-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+            </div>
+            <h2>Клиент готовится к релизу</h2>
+            <p>LASTED находится в финальной стадии разработки. Скоро мы запустим полноценную версию!</p>
+            <div class="coming-soon-features">
+                <div class="coming-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Все модули готовы</span>
+                </div>
+                <div class="coming-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Bypass тестируется</span>
+                </div>
+                <div class="coming-feature">
+                    <span class="feature-progress">⏳</span>
+                    <span>Финальная оптимизация</span>
+                </div>
+            </div>
+            <p class="coming-soon-cta">Следи за новостями в Discord и Telegram!</p>
+            <div class="coming-soon-links">
+                <a href="https://discord.gg/mZjW5E4guQ" class="btn primary">Discord</a>
+                <a href="https://t.me/LastedClient" class="btn secondary">Telegram</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="copyright">© 2025 LASTED</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
