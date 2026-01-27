@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LASTED - Free Minecraft Client</title>
+    <title>Скачать - LASTED</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -13,7 +13,7 @@
         <a href="index.html" class="logo">LASTED</a>
         <div class="nav-links">
             <a href="features.html">Функции</a>
-            <a href="download.html">Скачать</a>
+            <a href="download.html" class="active">Скачать</a>
             <a href="community.html">Сообщество</a>
             <a href="team.html">Команда</a>
             <a href="faq.html">FAQ</a>
@@ -22,18 +22,69 @@
         </div>
     </nav>
 
-    <main class="hero-main">
-        <div class="hero-content">
-            <h1 class="title">LASTED</h1>
-            <p class="desc">Бесплатный Minecraft клиент для PvP</p>
-            <div class="hero-btns">
-                <a href="download.html" class="btn primary">Скачать</a>
-                <a href="https://discord.gg/mZjW5E4guQ" class="btn secondary">Discord</a>
+    <main class="page-content">
+        <div class="page-header">
+            <h1>Скачать</h1>
+            <p>Выбери версию для своего сервера</p>
+        </div>
+
+        <div class="download-grid">
+            <div class="download-card featured">
+                <div class="version-badge">Новинка</div>
+                <h3>LASTED 1.21.4</h3>
+                <p class="version-info">Fabric • Последняя версия</p>
+                <ul class="version-features">
+                    <li>✓ FunTime bypass</li>
+                    <li>✓ Автообновления</li>
+                    <li>✓ Лаунчер с GUI</li>
+                    <li>✓ Оптимизация</li>
+                </ul>
+                <button class="btn primary full" onclick="showComingSoon()">Скачать лаунчер</button>
+            </div>
+
+            <div class="download-card">
+                <div class="version-badge alt">Стабильная</div>
+                <h3>LASTED 1.16.5</h3>
+                <p class="version-info">Forge • Проверенная</p>
+                <ul class="version-features">
+                    <li>✓ Проверенный bypass</li>
+                    <li>✓ Легкий вес</li>
+                    <li>✓ Стабильная работа</li>
+                    <li>✓ Совместимость</li>
+                </ul>
+                <button class="btn secondary full" onclick="showComingSoon()">Скачать .jar</button>
+            </div>
+        </div>
+
+        <div class="download-info">
+            <h2>Как установить?</h2>
+            <div class="install-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Зарегистрируйся</h4>
+                        <p>Создай аккаунт чтобы получить доступ к скачиванию</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Скачай файл</h4>
+                        <p>Выбери нужную версию и скачай лаунчер или .jar файл</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Запусти</h4>
+                        <p>Открой лаунчер, введи свой UID и наслаждайся игрой</p>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- Auth Modal -->
+    <!-- Auth Modal (same as index.html) -->
     <div class="modal" id="authModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -61,12 +112,11 @@
                 <div class="success-icon">✓</div>
                 <h3>Готово!</h3>
                 <p>UID: <span class="uid-highlight" id="finalUid"></span></p>
-                <a href="download.html" class="btn primary full">Скачать</a>
+                <a href="#" class="btn primary full" id="downloadBtn">Скачать</a>
             </div>
         </div>
     </div>
 
-    <!-- Dashboard Modal -->
     <div class="modal" id="dashboardModal">
         <div class="modal-content dashboard">
             <button class="modal-close" onclick="closeDashboard()">&times;</button>
@@ -101,7 +151,6 @@
         </div>
     </div>
 
-    <!-- Admin Panel Modal -->
     <div class="modal" id="adminModal">
         <div class="modal-content admin-panel">
             <button class="modal-close" onclick="closeAdmin()">&times;</button>
@@ -120,6 +169,40 @@
                 </select>
             </div>
             <div class="admin-users" id="adminUsers"></div>
+        </div>
+    </div>
+
+    <!-- Coming Soon Modal -->
+    <div class="modal" id="comingSoonModal">
+        <div class="modal-content coming-soon">
+            <button class="modal-close" onclick="closeComingSoon()">&times;</button>
+            <div class="coming-soon-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+            </div>
+            <h2>Клиент готовится к релизу</h2>
+            <p>LASTED находится в финальной стадии разработки. Скоро мы запустим полноценную версию!</p>
+            <div class="coming-soon-features">
+                <div class="coming-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Все модули готовы</span>
+                </div>
+                <div class="coming-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Bypass тестируется</span>
+                </div>
+                <div class="coming-feature">
+                    <span class="feature-progress">⏳</span>
+                    <span>Финальная оптимизация</span>
+                </div>
+            </div>
+            <p class="coming-soon-cta">Следи за новостями в Discord и Telegram!</p>
+            <div class="coming-soon-links">
+                <a href="https://discord.gg/mZjW5E4guQ" class="btn primary">Discord</a>
+                <a href="https://t.me/LastedClient" class="btn secondary">Telegram</a>
+            </div>
         </div>
     </div>
 

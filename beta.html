@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LASTED - Free Minecraft Client</title>
+    <title>Beta - LASTED</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -17,18 +17,80 @@
             <a href="community.html">Сообщество</a>
             <a href="team.html">Команда</a>
             <a href="faq.html">FAQ</a>
-            <a href="beta.html" id="betaLink" style="display:none">🧪 Beta</a>
+            <a href="beta.html" class="active" id="betaLink" style="display:none">🧪 Beta</a>
             <a href="#" class="nav-btn" id="accountBtn" onclick="showAccount()">Войти</a>
         </div>
     </nav>
 
-    <main class="hero-main">
-        <div class="hero-content">
-            <h1 class="title">LASTED</h1>
-            <p class="desc">Бесплатный Minecraft клиент для PvP</p>
-            <div class="hero-btns">
-                <a href="download.html" class="btn primary">Скачать</a>
-                <a href="https://discord.gg/mZjW5E4guQ" class="btn secondary">Discord</a>
+    <main class="page-content">
+        <div class="page-header">
+            <h1>🧪 Beta Builds</h1>
+            <p>Эксклюзивные билды для бета-тестеров</p>
+        </div>
+
+        <div class="beta-access-denied" id="betaAccessDenied">
+            <div class="access-denied-icon">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </div>
+            <h2>Доступ ограничен</h2>
+            <p>Эта страница доступна только для пользователей с ролью Beta</p>
+            <a href="index.html" class="btn primary">На главную</a>
+        </div>
+
+        <div class="beta-content hidden" id="betaContent">
+            <div class="beta-info">
+                <div class="beta-info-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <h3>Добро пожаловать, бета-тестер!</h3>
+                <p>Здесь ты можешь скачать последние тестовые версии LASTED</p>
+            </div>
+
+            <div class="builds-list">
+                <div class="build-card release">
+                    <div class="build-header">
+                        <div class="build-info">
+                            <div class="build-icon">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3>Release Build</h3>
+                                <span class="build-version">v1.0.0-beta</span>
+                            </div>
+                        </div>
+                        <span class="build-badge release">Release</span>
+                    </div>
+                    <p class="build-desc">Стабильная версия для тестирования</p>
+                    <div class="build-features">
+                        <div class="build-feature">✓ Все основные модули</div>
+                        <div class="build-feature">✓ FunTime bypass</div>
+                        <div class="build-feature">✓ Оптимизация</div>
+                    </div>
+                    <button class="btn primary full" onclick="showComingSoon()">
+                        <span>Установить</span>
+                        <span class="btn-icon">🚀</span>
+                    </button>
+                </div>
+
+                <div class="coming-soon-builds">
+                    <div class="coming-soon-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Ждите скоро...</h3>
+                    <p>Новые билды появятся в ближайшее время!</p>
+                </div>
             </div>
         </div>
     </main>
@@ -123,10 +185,63 @@
         </div>
     </div>
 
+    <!-- Coming Soon Modal -->
+    <div class="modal" id="comingSoonModal">
+        <div class="modal-content coming-soon">
+            <button class="modal-close" onclick="closeComingSoon()">&times;</button>
+            <div class="coming-soon-icon">🚀</div>
+            <h2>Клиент готовится к релизу</h2>
+            <p>LASTED находится в финальной стадии разработки. Скоро мы запустим полноценную версию!</p>
+            <div class="coming-soon-features">
+                <div class="coming-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Все модули готовы</span>
+                </div>
+                <div class="coming-feature">
+                    <span class="feature-check">✓</span>
+                    <span>Bypass тестируется</span>
+                </div>
+                <div class="coming-feature">
+                    <span class="feature-progress">⏳</span>
+                    <span>Финальная оптимизация</span>
+                </div>
+            </div>
+            <p class="coming-soon-cta">Следи за новостями в Discord и Telegram!</p>
+            <div class="coming-soon-links">
+                <a href="https://discord.gg/mZjW5E4guQ" class="btn primary">Discord</a>
+                <a href="https://t.me/LastedClient" class="btn secondary">Telegram</a>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         <p class="copyright">© 2025 LASTED</p>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Check beta access on page load
+        window.addEventListener('load', () => {
+            checkBetaAccess();
+        });
+
+        function checkBetaAccess() {
+            const saved = localStorage.getItem('laset_user');
+            if (saved) {
+                const user = JSON.parse(saved);
+                if (user.role === 'beta' || user.role === 'admin') {
+                    document.getElementById('betaAccessDenied').classList.add('hidden');
+                    document.getElementById('betaContent').classList.remove('hidden');
+                } else {
+                    document.getElementById('betaAccessDenied').classList.remove('hidden');
+                    document.getElementById('betaContent').classList.add('hidden');
+                }
+            } else {
+                // Not logged in
+                document.getElementById('betaAccessDenied').classList.remove('hidden');
+                document.getElementById('betaContent').classList.add('hidden');
+            }
+        }
+    </script>
 </body>
 </html>
