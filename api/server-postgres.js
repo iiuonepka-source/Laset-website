@@ -9,9 +9,7 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-// Static files disabled for Railway (use separate static hosting)
-// app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(path.join(__dirname, '..')));
 
 // PostgreSQL connection pool
 // Railway автоматически предоставляет DATABASE_URL
@@ -540,11 +538,10 @@ app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Catch-all route disabled for Railway
-// Use separate static hosting (Vercel, Netlify, etc.) for frontend
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, '..', 'index.html'));
-// });
+// Catch-all route
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
