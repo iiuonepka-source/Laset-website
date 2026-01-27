@@ -87,6 +87,12 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
     const pass = document.getElementById('loginPass').value;
     const errEl = document.getElementById('loginError');
     errEl.textContent = '';
+    
+    if (!uid || !pass) {
+        errEl.textContent = 'Заполните все поля';
+        return;
+    }
+    
     try {
         const res = await fetch(`${API_URL}/api/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid, password: pass }) });
         const data = await res.json();
@@ -97,7 +103,10 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
             updateAccountBtn();
             showSuccess(data.uid, data.nickname);
         } else errEl.textContent = data.error || 'Ошибка';
-    } catch { errEl.textContent = 'Сервер недоступен'; }
+    } catch (err) { 
+        console.error('Login error:', err);
+        errEl.textContent = 'Сервер недоступен. Дождитесь деплоя на Railway.'; 
+    }
 });
 
 // Register
@@ -383,3 +392,15 @@ document.getElementById('authModal').addEventListener('click', e => { if (e.targ
 document.getElementById('dashboardModal').addEventListener('click', e => { if (e.target.id === 'dashboardModal') closeDashboard(); });
 document.getElementById('adminModal').addEventListener('click', e => { if (e.target.id === 'adminModal') closeAdmin(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeDashboard(); closeAdmin(); } });
+
+
+// Account button click handler
+document.addEventListener('DOMContentLoaded', () => {
+    const accountBtn = document.getElementById('accountBtn');
+    if (accountBtn) {
+        accountBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showAccount();
+        });
+    }
+});
