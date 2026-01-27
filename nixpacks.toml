@@ -1,8 +1,0 @@
-[phases.setup]
-nixPkgs = ['nodejs_22']
-
-[phases.install]
-cmds = ['cd api && npm install']
-
-[start]
-cmd = 'cd api && node server.js'
