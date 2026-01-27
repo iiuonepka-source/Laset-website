@@ -1,12 +1,26 @@
 {
   "name": "laset-api",
-  "version": "1.0.0",
-  "main": "server.js",
+  "version": "2.0.0",
+  "description": "Laset API with PostgreSQL",
+  "main": "server-postgres.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server-postgres.js",
+    "dev": "nodemon server-postgres.js",
+    "migrate": "node migrate.js",
+    "init-db": "node init-db.js",
+    "postinstall": "node init-db.js || echo 'DB init skipped'"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "pg": "^8.11.3",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

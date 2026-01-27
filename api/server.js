@@ -20,7 +20,9 @@ function loadDB() {
     return db;
 }
 
-function saveDB(db) { fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2)); }
+function saveDB(db) { 
+    fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2)); 
+}
 
 // Register
 app.post('/api/register', (req, res) => {
@@ -36,7 +38,7 @@ app.post('/api/register', (req, res) => {
     const user = {
         uid, email, nickname,
         password: crypto.createHash('sha256').update(password).digest('hex'),
-        role: uid === 1 ? 'admin' : 'user', // Первый юзер - админ
+        role: uid === 1 ? 'admin' : 'user',
         hwid: null, banned: false, createdAt: new Date().toISOString(), lastLogin: null, sessions: 0, playTime: 0
     };
     db.users.push(user);
@@ -203,4 +205,9 @@ app.get('/api/next-uid', (req, res) => {
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, '..', 'index.html')));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Laset API on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`🚀 Laset API running on port ${PORT}`);
+    console.log(`📊 Database: JSON (users.json)`);
+    console.log(`🔒 Security: SHA256`);
+    console.log(`\n💡 Tip: For better security, migrate to PostgreSQL (see README.md)`);
+});
