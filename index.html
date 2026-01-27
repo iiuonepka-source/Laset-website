@@ -128,5 +128,28 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Inline fix for account button
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            const btn = document.getElementById('accountBtn');
+            console.log('Account button:', btn);
+            if (btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Button clicked!');
+                    const modal = document.getElementById('authModal');
+                    if (modal) {
+                        modal.classList.add('show');
+                        console.log('Modal opened');
+                    } else {
+                        console.error('Modal not found');
+                    }
+                });
+            } else {
+                console.error('Button not found');
+            }
+        });
+    </script>
 </body>
 </html>
