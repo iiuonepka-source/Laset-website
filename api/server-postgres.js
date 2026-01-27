@@ -332,7 +332,7 @@ app.post('/api/admin/users', async (req, res) => {
 app.post('/api/admin/set-role', async (req, res) => {
     const { uid, password, targetUid, role } = req.body;
 
-    if (!['user', 'admin'].includes(role)) {
+    if (!['user', 'admin', 'youtube', 'tiktok', 'vip', 'beta'].includes(role)) {
         return res.status(400).json({ error: 'Неверная роль' });
     }
 
@@ -427,6 +427,115 @@ app.post('/api/admin/delete', async (req, res) => {
         console.error('Delete error:', err);
         res.status(500).json({ error: 'Ошибка сервера' });
     }
+});
+
+// Admin: Change user nickname
+app.post('/api/admin/change-nickname', async (req, res) => {
+    const { uid, password, targetUid, newNickname } = req.body;
+
+    try {
+        const admin = await pool.query(
+            'SELECT password_hash, role FROM users WHERE uid = $1',
+            [parseInt(uid)]
+        );
+
+        if (admin.rows.length === 0 || admin.rows[0].role !== 'admin') {
+            return res.status(403).json({ error: 'Нет доступа' });
+        }
+
+        const validPassword = await bcrypt.compare(password, admin.rows[0].password_hash);
+        if (!validPassword) {
+            return res.status(401).json({ error: 'Неверный пароль' });
+        }
+
+        if (!newNickname || newNickname.length > 16) {
+            return res.status(400).json({ error: 'Неверный никнейм' });
+        }
+
+        const existing = await pool.query(
+            'SELECT uid FROM users WHERE LOWER(nickname) = LOWER($1) AND uid != $2',
+            [newNickname, parseInt(targetUid)]
+        );
+        if (existing.rows.length > 0) {
+            return res.status(400).json({ error: 'Никнейм занят' });
+        }
+
+        await pool.query('UPDATE users SET nickname = $1 WHERE uid = $2', [newNickname, parseInt(targetUid)]);
+        await logAdminAction(parseInt(uid), 'CHANGE_NICKNAME', parseInt(targetUid), `Changed to ${newNickname}`);
+
+        res.json({ success: true, nickname: newNickname });
+    } catch (err) {
+        console.error('Change nickname error:', err);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+});
+
+// Admin: Change user password
+app.post('/api/admin/change-password', async (req, res) => {
+    const { uid, password, targetUid, newPassword } = req.body;
+
+    try {
+        const admin = await pool.query(
+            'SELECT password_hash, role FROM users WHERE uid = $1',
+            [parseInt(uid)]
+        );
+
+        if (admin.rows.length === 0 || admin.rows[0].role !== 'admin') {
+            return res.status(403).json({ error: 'Нет доступа' });
+        }
+
+        const validPassword = await bcrypt.compare(password, admin.rows[0].password_hash);
+        if (!validPassword) {
+            return res.status(401).json({ error: 'Неверный пароль' });
+        }
+
+        if (!newPassword || newPassword.length < 6) {
+            return res.status(400).json({ error: 'Пароль минимум 6 символов' });
+        }
+
+        const newPasswordHash = await bcrypt.hash(newPassword, BCRYPT_ROUNDS);
+        await pool.query('UPDATE users SET password_hash = $1 WHERE uid = $2', [newPasswordHash, parseInt(targetUid)]);
+        await logAdminAction(parseInt(uid), 'CHANGE_PASSWORD', parseInt(targetUid), null);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Change password error:', err);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+});
+
+// Admin: Kick user (reset HWID)
+app.post('/api/admin/kick', async (req, res) => {
+    const { uid, password, targetUid } = req.body;
+
+    try {
+        const admin = await pool.query(
+            'SELECT password_hash, role FROM users WHERE uid = $1',
+            [parseInt(uid)]
+        );
+
+        if (admin.rows.length === 0 || admin.rows[0].role !== 'admin') {
+            return res.status(403).json({ error: 'Нет доступа' });
+        }
+
+        const validPassword = await bcrypt.compare(password, admin.rows[0].password_hash);
+        if (!validPassword) {
+            return res.status(401).json({ error: 'Неверный пароль' });
+        }
+
+        await pool.query('UPDATE users SET hwid = NULL WHERE uid = $1', [parseInt(targetUid)]);
+        await logAdminAction(parseInt(uid), 'KICK', parseInt(targetUid), 'HWID reset');
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Kick error:', err);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+});
+
+// Health check
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 // Catch-all route

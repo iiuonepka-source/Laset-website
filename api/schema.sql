@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) UNIQUE NOT NULL,
     nickname VARCHAR(16) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    role VARCHAR(20) DEFAULT 'user' CHECK (role IN ('user', 'admin')),
+    role VARCHAR(20) DEFAULT 'user' CHECK (role IN ('user', 'admin', 'youtube', 'tiktok', 'vip')),
     hwid VARCHAR(64),
     banned BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

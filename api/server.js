@@ -89,7 +89,7 @@ app.post('/api/admin/users', (req, res) => {
 // Set role (admin only)
 app.post('/api/admin/set-role', (req, res) => {
     const { uid, password, targetUid, role } = req.body;
-    if (!['user', 'admin'].includes(role)) return res.status(400).json({ error: 'Неверная роль' });
+    if (!['user', 'admin', 'youtube', 'tiktok', 'vip'].includes(role)) return res.status(400).json({ error: 'Неверная роль' });
     
     const db = loadDB();
     const admin = db.users.find(u => u.uid === parseInt(uid));

@@ -4,11 +4,10 @@
   "description": "Laset API with PostgreSQL",
   "main": "server-postgres.js",
   "scripts": {
-    "start": "node server-postgres.js",
+    "start": "node init-db.js && node server-postgres.js",
     "dev": "nodemon server-postgres.js",
     "migrate": "node migrate.js",
-    "init-db": "node init-db.js",
-    "postinstall": "node init-db.js || echo 'DB init skipped'"
+    "init-db": "node init-db.js"
   },
   "dependencies": {
     "express": "^4.18.2",
