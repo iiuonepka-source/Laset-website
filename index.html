@@ -18,7 +18,7 @@
             <a href="team.html">Команда</a>
             <a href="faq.html">FAQ</a>
             <a href="beta.html" id="betaLink" style="display:none">🧪 Beta</a>
-            <button class="nav-btn" id="accountBtn">Войти</button>
+            <button class="nav-btn" id="accountBtn" onclick="showAccount()">Войти</button>
         </div>
     </nav>
 
@@ -128,33 +128,5 @@
     </footer>
 
     <script src="script.js"></script>
-    <script>
-        // Inline fix for account button
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded');
-            const btn = document.getElementById('accountBtn');
-            console.log('Account button:', btn);
-            if (btn) {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('Button clicked!');
-                    const modal = document.getElementById('authModal');
-                    if (modal) {
-                        modal.classList.add('show');
-                        console.log('Modal opened');
-                        // Show UID even if API is down
-                        const uidEl = document.getElementById('nextUid');
-                        if (uidEl && uidEl.textContent === 'Загрузка...') {
-                            uidEl.textContent = '1 (API недоступен)';
-                        }
-                    } else {
-                        console.error('Modal not found');
-                    }
-                });
-            } else {
-                console.error('Button not found');
-            }
-        });
-    </script>
 </body>
 </html>

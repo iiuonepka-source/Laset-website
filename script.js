@@ -39,25 +39,8 @@ window.addEventListener('load', () => {
 
 function updateAccountBtn() {
     const btn = document.getElementById('accountBtn');
-    const betaLink = document.getElementById('betaLink');
-    
-    if (currentUser) { 
-        btn.textContent = currentUser.nickname; 
-        btn.classList.add('logged-in');
-        
-        // Show beta link for beta users and admins
-        if (betaLink && (currentUser.role === 'beta' || currentUser.role === 'admin')) {
-            betaLink.style.display = 'block';
-        }
-    } else { 
-        btn.textContent = 'Войти'; 
-        btn.classList.remove('logged-in');
-        
-        // Hide beta link
-        if (betaLink) {
-            betaLink.style.display = 'none';
-        }
-    }
+    if (currentUser) { btn.textContent = currentUser.nickname; btn.classList.add('logged-in'); }
+    else { btn.textContent = 'Войти'; btn.classList.remove('logged-in'); }
 }
 
 async function fetchNextUid() {
@@ -67,17 +50,6 @@ async function fetchNextUid() {
 function showAuth(version) { if (currentUser) { startDownload(version); return; } selectedVersion = version; document.getElementById('authModal').classList.add('show'); fetchNextUid(); }
 function showAccount() { if (currentUser) showDashboard(); else document.getElementById('authModal').classList.add('show'); }
 function closeModal() { document.getElementById('authModal').classList.remove('show'); document.getElementById('loginForm').classList.remove('hidden'); document.getElementById('registerForm').classList.add('hidden'); document.getElementById('authSuccess').classList.add('hidden'); switchAuthTab('login'); }
-
-function showComingSoon() {
-    const modal = document.getElementById('comingSoonModal');
-    if (modal) modal.classList.add('show');
-}
-
-function closeComingSoon() {
-    const modal = document.getElementById('comingSoonModal');
-    if (modal) modal.classList.remove('show');
-}
-
 function switchAuthTab(tab) { document.querySelectorAll('.auth-tab').forEach((t, i) => t.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'register' && i === 1))); document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login'); document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register'); if (tab === 'register') fetchNextUid(); }
 
 // Login
@@ -87,12 +59,6 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
     const pass = document.getElementById('loginPass').value;
     const errEl = document.getElementById('loginError');
     errEl.textContent = '';
-    
-    if (!uid || !pass) {
-        errEl.textContent = 'Заполните все поля';
-        return;
-    }
-    
     try {
         const res = await fetch(`${API_URL}/api/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid, password: pass }) });
         const data = await res.json();
@@ -103,10 +69,7 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
             updateAccountBtn();
             showSuccess(data.uid, data.nickname);
         } else errEl.textContent = data.error || 'Ошибка';
-    } catch (err) { 
-        console.error('Login error:', err);
-        errEl.textContent = 'Сервер недоступен. Дождитесь деплоя на Railway.'; 
-    }
+    } catch { errEl.textContent = 'Сервер недоступен'; }
 });
 
 // Register
@@ -211,61 +174,25 @@ async function loadUsers() {
 function renderAdminStats(users) {
     const total = users.length;
     const admins = users.filter(u => u.role === 'admin').length;
-    const youtube = users.filter(u => u.role === 'youtube').length;
-    const tiktok = users.filter(u => u.role === 'tiktok').length;
-    const vip = users.filter(u => u.role === 'vip').length;
-    const beta = users.filter(u => u.role === 'beta').length;
     const banned = users.filter(u => u.banned).length;
     document.getElementById('adminStats').innerHTML = `
         <div class="dash-stat"><span class="dash-val">${total}</span><span class="dash-lbl">Всего</span></div>
         <div class="dash-stat"><span class="dash-val">${admins}</span><span class="dash-lbl">Админов</span></div>
-        <div class="dash-stat"><span class="dash-val">${youtube}</span><span class="dash-lbl">YouTube</span></div>
-        <div class="dash-stat"><span class="dash-val">${tiktok}</span><span class="dash-lbl">TikTok</span></div>
-        <div class="dash-stat"><span class="dash-val">${vip}</span><span class="dash-lbl">VIP</span></div>
-        <div class="dash-stat"><span class="dash-val">${beta}</span><span class="dash-lbl">Beta</span></div>
         <div class="dash-stat"><span class="dash-val">${banned}</span><span class="dash-lbl">Забанено</span></div>
     `;
 }
 
 function renderUsers(users) {
     const container = document.getElementById('adminUsers');
-    const roleColors = {
-        admin: '#5a82ff',
-        youtube: '#ff0000',
-        tiktok: '#00f2ea',
-        vip: '#ffd700',
-        beta: '#ff6b35',
-        user: '#666'
-    };
-    const roleIcons = {
-        admin: '👑',
-        youtube: '📺',
-        tiktok: '🎵',
-        vip: '⭐',
-        beta: '🧪',
-        user: '👤'
-    };
     container.innerHTML = users.map(u => `
-        <div class="admin-user ${u.banned ? 'banned' : ''}" id="user-${u.uid}">
+        <div class="admin-user ${u.banned ? 'banned' : ''}">
             <div class="admin-user-info">
-                <h4>${u.nickname} <span class="role-badge ${u.role}" style="background:${roleColors[u.role]}">${roleIcons[u.role]} ${u.role.toUpperCase()}</span></h4>
+                <h4>${u.nickname} <span class="role-badge ${u.role}">${u.role}</span></h4>
                 <span>UID: ${u.uid} • ${u.email} ${u.banned ? '• 🚫 BANNED' : ''}</span>
             </div>
             <div class="admin-user-actions">
-                ${u.role !== 'admin' || u.uid !== currentUser.uid ? `
-                    <select class="role-select" onchange="setRole(${u.uid}, this.value)" style="padding:6px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--white);font-size:11px">
-                        <option value="${u.role}" selected>${roleIcons[u.role]} ${u.role}</option>
-                        ${u.role !== 'admin' ? '<option value="admin">👑 admin</option>' : ''}
-                        ${u.role !== 'youtube' ? '<option value="youtube">📺 youtube</option>' : ''}
-                        ${u.role !== 'tiktok' ? '<option value="tiktok">🎵 tiktok</option>' : ''}
-                        ${u.role !== 'vip' ? '<option value="vip">⭐ vip</option>' : ''}
-                        ${u.role !== 'beta' ? '<option value="beta">🧪 beta</option>' : ''}
-                        ${u.role !== 'user' ? '<option value="user">👤 user</option>' : ''}
-                    </select>
-                    <button class="edit-btn" onclick="showEditUser(${u.uid}, '${u.nickname}')" title="Редактировать">✏️</button>
-                ` : '<span style="font-size:11px;color:var(--gray)">Это ты</span>'}
+                ${u.role === 'user' ? `<button class="role-btn" onclick="setRole(${u.uid}, 'admin')">→ Admin</button>` : u.uid !== currentUser.uid ? `<button class="role-btn" onclick="setRole(${u.uid}, 'user')">→ User</button>` : ''}
                 ${u.role !== 'admin' ? (u.banned ? `<button class="unban-btn" onclick="banUser(${u.uid}, false)">Разбан</button>` : `<button class="ban-btn" onclick="banUser(${u.uid}, true)">Бан</button>`) : ''}
-                ${u.role !== 'admin' ? `<button class="kick-btn" onclick="kickUser(${u.uid})" title="Выкинуть">🚪</button>` : ''}
                 ${u.role !== 'admin' ? `<button class="del-btn" onclick="deleteUser(${u.uid})">✕</button>` : ''}
             </div>
         </div>
@@ -274,15 +201,7 @@ function renderUsers(users) {
 
 function filterUsers() {
     const q = document.getElementById('adminSearch').value.toLowerCase();
-    const roleFilter = document.getElementById('roleFilter').value;
-    let filtered = allUsers.filter(u => 
-        u.nickname.toLowerCase().includes(q) || 
-        u.uid.toString().includes(q) || 
-        u.email.toLowerCase().includes(q)
-    );
-    if (roleFilter) {
-        filtered = filtered.filter(u => u.role === roleFilter);
-    }
+    const filtered = allUsers.filter(u => u.nickname.toLowerCase().includes(q) || u.uid.toString().includes(q) || u.email.toLowerCase().includes(q));
     renderUsers(filtered);
 }
 
@@ -308,99 +227,8 @@ async function deleteUser(targetUid) {
     } catch {}
 }
 
-async function kickUser(targetUid) {
-    if (!confirm('Выкинуть пользователя? (сброс HWID)')) return;
-    try {
-        const res = await fetch(`${API_URL}/api/admin/kick`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uid: currentUser.uid, password: localStorage.getItem('laset_pass'), targetUid }) });
-        const data = await res.json();
-        if (data.success) {
-            alert('Пользователь выкинут!');
-            loadUsers();
-        } else {
-            alert(data.error || 'Ошибка');
-        }
-    } catch {
-        alert('Ошибка сервера');
-    }
-}
-
-function showEditUser(targetUid, currentNickname) {
-    const newNick = prompt('Новый никнейм:', currentNickname);
-    if (newNick && newNick !== currentNickname) {
-        changeUserNickname(targetUid, newNick);
-    }
-    
-    if (confirm('Изменить пароль?')) {
-        const newPass = prompt('Новый пароль (минимум 6 символов):');
-        if (newPass && newPass.length >= 6) {
-            changeUserPassword(targetUid, newPass);
-        } else if (newPass) {
-            alert('Пароль должен быть минимум 6 символов');
-        }
-    }
-}
-
-async function changeUserNickname(targetUid, newNickname) {
-    try {
-        const res = await fetch(`${API_URL}/api/admin/change-nickname`, { 
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json' }, 
-            body: JSON.stringify({ 
-                uid: currentUser.uid, 
-                password: localStorage.getItem('laset_pass'), 
-                targetUid, 
-                newNickname 
-            }) 
-        });
-        const data = await res.json();
-        if (data.success) {
-            alert('Никнейм изменён!');
-            loadUsers();
-        } else {
-            alert(data.error || 'Ошибка');
-        }
-    } catch {
-        alert('Ошибка сервера');
-    }
-}
-
-async function changeUserPassword(targetUid, newPassword) {
-    try {
-        const res = await fetch(`${API_URL}/api/admin/change-password`, { 
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json' }, 
-            body: JSON.stringify({ 
-                uid: currentUser.uid, 
-                password: localStorage.getItem('laset_pass'), 
-                targetUid, 
-                newPassword 
-            }) 
-        });
-        const data = await res.json();
-        if (data.success) {
-            alert('Пароль изменён!');
-        } else {
-            alert(data.error || 'Ошибка');
-        }
-    } catch {
-        alert('Ошибка сервера');
-    }
-}
-
 // Modal handlers
 document.getElementById('authModal').addEventListener('click', e => { if (e.target.id === 'authModal') closeModal(); });
 document.getElementById('dashboardModal').addEventListener('click', e => { if (e.target.id === 'dashboardModal') closeDashboard(); });
 document.getElementById('adminModal').addEventListener('click', e => { if (e.target.id === 'adminModal') closeAdmin(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeDashboard(); closeAdmin(); } });
-
-
-// Account button click handler
-document.addEventListener('DOMContentLoaded', () => {
-    const accountBtn = document.getElementById('accountBtn');
-    if (accountBtn) {
-        accountBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            showAccount();
-        });
-    }
-});
