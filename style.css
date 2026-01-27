@@ -147,6 +147,10 @@ body::after {
     transition: all 0.2s;
     position: relative;
     z-index: 1;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    text-decoration: none;
 }
 
 .nav-btn::before {
