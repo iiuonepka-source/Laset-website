@@ -23,7 +23,10 @@ body {
     color: var(--white);
     line-height: 1.6;
     overflow-x: hidden;
+    overflow-y: auto;
     position: relative;
+    margin: 0;
+    padding: 0;
 }
 
 /* Purple animated rays background */
@@ -281,6 +284,7 @@ body::after {
     display: inline-block;
     backdrop-filter: blur(20px);
     position: relative;
+    z-index: 10;
 }
 
 .btn::before {
@@ -1088,6 +1092,8 @@ body::after {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
+    position: relative;
+    z-index: 10;
 }
 
 .auth-tab.active {

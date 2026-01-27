@@ -53,7 +53,7 @@
                 <div class="input-group"><label>Email</label><input type="email" id="regEmail" required></div>
                 <div class="input-group"><label>Никнейм</label><input type="text" id="regNick" maxlength="16" required></div>
                 <div class="input-group"><label>Пароль</label><input type="password" id="regPass" required></div>
-                <div class="uid-display"><span>Твой UID:</span><span class="uid-value" id="nextUid">...</span></div>
+                <div class="uid-display"><span>Твой UID:</span><span class="uid-value" id="nextUid">Загрузка...</span></div>
                 <div class="error-msg" id="regError"></div>
                 <button type="submit" class="btn primary full">Зарегистрироваться</button>
             </form>
@@ -142,6 +142,11 @@
                     if (modal) {
                         modal.classList.add('show');
                         console.log('Modal opened');
+                        // Show UID even if API is down
+                        const uidEl = document.getElementById('nextUid');
+                        if (uidEl && uidEl.textContent === 'Загрузка...') {
+                            uidEl.textContent = '1 (API недоступен)';
+                        }
                     } else {
                         console.error('Modal not found');
                     }
