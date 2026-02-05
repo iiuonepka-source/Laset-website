@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Language - Lasted Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <div class="cursor-glow"></div>
+
+    <section class="language-select-section">
+        <div class="language-container">
+            <div class="logo-large">LASTED<span class="highlight">PREMIUM</span></div>
+            <h1>Select Your Language</h1>
+            <p class="language-subtitle">Choose your preferred language and currency</p>
+            
+            <div class="auth-notice">
+                <p>Already have an account? <a href="auth.html">Login here</a></p>
+            </div>
+            
+            <div class="language-options">
+                <div class="language-card" onclick="selectLanguage('en')">
+                    <div class="flag-icon">🇬🇧</div>
+                    <h3>English</h3>
+                    <p>Currency: EUR (€)</p>
+                    <div class="select-btn">Select</div>
+                </div>
+                
+                <div class="language-card" onclick="selectLanguage('ru')">
+                    <div class="flag-icon">🇷🇺</div>
+                    <h3>Русский</h3>
+                    <p>Валюта: RUB (₽)</p>
+                    <div class="select-btn">Выбрать</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+    <script>
+        function selectLanguage(lang) {
+            sessionStorage.setItem('language', lang);
+            sessionStorage.setItem('currency', lang === 'en' ? 'EUR' : 'RUB');
+            window.location.href = 'index.html';
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

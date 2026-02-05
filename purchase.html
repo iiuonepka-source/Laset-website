@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase - Lasted Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <div class="cursor-glow"></div>
+
+    <nav class="navbar">
+        <div class="logo">LASTED<span class="highlight">PREMIUM</span></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#features">Features</a>
+            <a href="index.html#bypass">Bypasses</a>
+            <a href="purchase.html" class="btn-nav">Purchase</a>
+        </div>
+    </nav>
+
+    <section class="purchase-section">
+        <div class="purchase-header">
+            <h1>Choose Your Plan</h1>
+            <p class="subtitle">Unlock the full potential of Lasted Premium</p>
+        </div>
+
+        <div class="promo-banner">
+            <i data-lucide="tag" class="promo-icon"></i>
+            <span>Use code <strong>DEV</strong> for 12% discount!</span>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="plan-header">
+                    <h3>15 Days</h3>
+                    <div class="price">
+                        <span class="amount">€7</span>
+                    </div>
+                </div>
+                <ul class="features-list">
+                    <li><i data-lucide="check"></i> Full Access</li>
+                    <li><i data-lucide="check"></i> All Bypasses</li>
+                    <li><i data-lucide="check"></i> Discord Support</li>
+                    <li><i data-lucide="check"></i> Regular Updates</li>
+                </ul>
+                <button class="buy-btn" onclick="openPurchaseModal('15 Days', 7)">
+                    Purchase Now
+                </button>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="badge">POPULAR</div>
+                <div class="plan-header">
+                    <h3>30 Days</h3>
+                    <div class="price">
+                        <span class="amount">€15</span>
+                    </div>
+                </div>
+                <ul class="features-list">
+                    <li><i data-lucide="check"></i> Full Access</li>
+                    <li><i data-lucide="check"></i> All Bypasses</li>
+                    <li><i data-lucide="check"></i> Discord Support</li>
+                    <li><i data-lucide="check"></i> Regular Updates</li>
+                    <li><i data-lucide="check"></i> Priority Support</li>
+                </ul>
+                <button class="buy-btn" onclick="openPurchaseModal('30 Days', 15)">
+                    Purchase Now
+                </button>
+            </div>
+
+            <div class="pricing-card">
+                <div class="plan-header">
+                    <h3>90 Days</h3>
+                    <div class="price">
+                        <span class="amount">€30</span>
+                    </div>
+                </div>
+                <ul class="features-list">
+                    <li><i data-lucide="check"></i> Full Access</li>
+                    <li><i data-lucide="check"></i> All Bypasses</li>
+                    <li><i data-lucide="check"></i> Discord Support</li>
+                    <li><i data-lucide="check"></i> Regular Updates</li>
+                    <li><i data-lucide="check"></i> Priority Support</li>
+                </ul>
+                <button class="buy-btn" onclick="openPurchaseModal('90 Days', 30)">
+                    Purchase Now
+                </button>
+            </div>
+
+            <div class="pricing-card lifetime">
+                <div class="badge gold">BEST VALUE</div>
+                <div class="plan-header">
+                    <h3>Lifetime</h3>
+                    <div class="price">
+                        <span class="amount">€50</span>
+                    </div>
+                </div>
+                <ul class="features-list">
+                    <li><i data-lucide="check"></i> Full Access</li>
+                    <li><i data-lucide="check"></i> All Bypasses</li>
+                    <li><i data-lucide="check"></i> Discord Support</li>
+                    <li><i data-lucide="check"></i> Regular Updates</li>
+                    <li><i data-lucide="check"></i> Priority Support</li>
+                    <li><i data-lucide="check"></i> Lifetime Updates</li>
+                </ul>
+                <button class="buy-btn" onclick="openPurchaseModal('Lifetime', 50)">
+                    Purchase Now
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Purchase Modal -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closePurchaseModal()">&times;</span>
+            
+            <div class="modal-header">
+                <h2>Complete Your Purchase</h2>
+                <p id="selectedPlan"></p>
+            </div>
+
+            <div class="promo-input-section">
+                <label for="promoCode">Promo Code</label>
+                <div class="promo-input-wrapper">
+                    <input type="text" id="promoCode" placeholder="Enter promo code">
+                    <button onclick="applyPromo()" class="apply-btn">Apply</button>
+                </div>
+                <p id="promoMessage" class="promo-message"></p>
+            </div>
+
+            <div class="price-summary">
+                <div class="price-row">
+                    <span>Original Price:</span>
+                    <span id="originalPrice">€0</span>
+                </div>
+                <div class="price-row discount" id="discountRow" style="display: none;">
+                    <span>Discount (12%):</span>
+                    <span id="discountAmount">-€0</span>
+                </div>
+                <div class="price-row total">
+                    <span>Total:</span>
+                    <span id="finalPrice">€0</span>
+                </div>
+            </div>
+
+            <button class="modal-buy-btn" onclick="completePurchase()">
+                <i data-lucide="shopping-cart"></i> Buy Now
+            </button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="brand">Lasted Premium</div>
+            <div class="rights">© 2026 Lasted Development. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script src="translations.js"></script>
+    <script src="script.js"></script>
+    <script src="purchase.js"></script>
+    <script src="translate-purchase.js"></script>
+    <script src="check-auth.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
