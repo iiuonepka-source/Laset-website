@@ -78,15 +78,15 @@ router.post('/register', async (req, res) => {
 
         // Create user
         const result = await pool.query(
-            'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email',
-            [username, email, hashedPassword]
+            'INSERT INTO users (username, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id, username, email, role',
+            [username, email, hashedPassword, username === 'DEV' ? 'admin' : 'user']
         );
 
         const user = result.rows[0];
 
         // Create token
         const token = jwt.sign(
-            { userId: user.id, username: user.username },
+            { userId: user.id, username: user.username, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '7d' }
         );
@@ -97,7 +97,8 @@ router.post('/register', async (req, res) => {
             user: {
                 id: user.id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                role: user.role
             }
         });
     } catch (error) {
@@ -135,7 +136,7 @@ router.post('/login', async (req, res) => {
 
         // Create token
         const token = jwt.sign(
-            { userId: user.id, username: user.username },
+            { userId: user.id, username: user.username, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '7d' }
         );
@@ -147,6 +148,7 @@ router.post('/login', async (req, res) => {
                 id: user.id,
                 username: user.username,
                 email: user.email,
+                role: user.role,
                 subscription_type: user.subscription_type,
                 subscription_expires: user.subscription_expires
             }
@@ -169,7 +171,7 @@ router.get('/verify', async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         const result = await pool.query(
-            'SELECT id, username, email, subscription_type, subscription_expires FROM users WHERE id = $1',
+            'SELECT id, username, email, role, subscription_type, subscription_expires, created_at FROM users WHERE id = $1',
             [decoded.userId]
         );
 
@@ -180,6 +182,110 @@ router.get('/verify', async (req, res) => {
         res.json({ success: true, user: result.rows[0] });
     } catch (error) {
         res.status(401).json({ error: 'Invalid token' });
+    }
+});
+
+// Admin: Get all users
+router.get('/admin/users', async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) return res.status(401).json({ error: 'No token provided' });
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        const adminCheck = await pool.query('SELECT role FROM users WHERE id = $1', [decoded.userId]);
+        if (adminCheck.rows.length === 0 || adminCheck.rows[0].role !== 'admin') {
+            return res.status(403).json({ error: 'Access denied' });
+        }
+
+        const result = await pool.query(
+            'SELECT id, username, email, role, subscription_type, subscription_expires, created_at FROM users ORDER BY created_at DESC'
+        );
+
+        res.json({ success: true, users: result.rows });
+    } catch (error) {
+        console.error('Admin get users error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Admin: Update user role
+router.post('/admin/update-role', async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) return res.status(401).json({ error: 'No token provided' });
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const adminCheck = await pool.query('SELECT role FROM users WHERE id = $1', [decoded.userId]);
+        
+        if (adminCheck.rows.length === 0 || adminCheck.rows[0].role !== 'admin') {
+            return res.status(403).json({ error: 'Access denied' });
+        }
+
+        const { userId, role } = req.body;
+        if (!userId || !role || !['user', 'admin'].includes(role)) {
+            return res.status(400).json({ error: 'Invalid data' });
+        }
+
+        await pool.query('UPDATE users SET role = $1 WHERE id = $2', [role, userId]);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Update role error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Admin: Update subscription
+router.post('/admin/update-subscription', async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) return res.status(401).json({ error: 'No token provided' });
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const adminCheck = await pool.query('SELECT role FROM users WHERE id = $1', [decoded.userId]);
+        
+        if (adminCheck.rows.length === 0 || adminCheck.rows[0].role !== 'admin') {
+            return res.status(403).json({ error: 'Access denied' });
+        }
+
+        const { userId, subscriptionType, days } = req.body;
+        let expiresDate = null;
+        
+        if (subscriptionType !== 'none' && days) {
+            expiresDate = new Date();
+            expiresDate.setDate(expiresDate.getDate() + parseInt(days));
+        }
+
+        await pool.query(
+            'UPDATE users SET subscription_type = $1, subscription_expires = $2 WHERE id = $3',
+            [subscriptionType, expiresDate, userId]
+        );
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Update subscription error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Admin: Delete user
+router.delete('/admin/delete-user/:userId', async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) return res.status(401).json({ error: 'No token provided' });
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const adminCheck = await pool.query('SELECT role FROM users WHERE id = $1', [decoded.userId]);
+        
+        if (adminCheck.rows.length === 0 || adminCheck.rows[0].role !== 'admin') {
+            return res.status(403).json({ error: 'Access denied' });
+        }
+
+        await pool.query('DELETE FROM users WHERE id = $1', [req.params.userId]);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Delete user error:', error);
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
