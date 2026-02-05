@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Lasted Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <div class="cursor-glow"></div>
+
+    <nav class="navbar">
+        <div class="logo">LASTED<span class="highlight">PREMIUM</span></div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="admin.html" class="btn-nav">Admin Panel</a>
+            <button onclick="logout()" class="logout-btn">Logout</button>
+        </div>
+    </nav>
+
+    <section class="dashboard-section">
+        <div class="admin-container">
+            <div class="dashboard-header">
+                <h1><i data-lucide="shield"></i> Admin <span class="highlight">Panel</span></h1>
+                <p class="subtitle">Manage users and subscriptions</p>
+            </div>
+
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <i data-lucide="users"></i>
+                    <div>
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i data-lucide="crown"></i>
+                    <div>
+                        <h3 id="activeSubscriptions">0</h3>
+                        <p>Active Subscriptions</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i data-lucide="shield-check"></i>
+                    <div>
+                        <h3 id="adminCount">0</h3>
+                        <p>Admins</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="users-table-container">
+                <h2>All Users</h2>
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Subscription</th>
+                            <th>Expires</th>
+                            <th>Registered</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td colspan="8" style="text-align: center;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Edit User Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            
+            <div class="modal-header">
+                <h2>Edit User</h2>
+                <p id="editUsername"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Role</label>
+                <select id="editRole" class="admin-select">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Subscription Type</label>
+                <select id="editSubscription" class="admin-select">
+                    <option value="none">None</option>
+                    <option value="15days">15 Days</option>
+                    <option value="30days">30 Days</option>
+                    <option value="90days">90 Days</option>
+                    <option value="lifetime">Lifetime</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Days to Add</label>
+                <input type="number" id="editDays" placeholder="Enter days" class="admin-input">
+            </div>
+
+            <div class="modal-actions">
+                <button class="save-btn" onclick="saveUserChanges()">
+                    <i data-lucide="save"></i> Save Changes
+                </button>
+                <button class="delete-btn" onclick="deleteUser()">
+                    <i data-lucide="trash-2"></i> Delete User
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="brand">Lasted Premium</div>
+            <div class="rights">© 2026 Lasted Development. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="admin.js"></script>
+    <script>
+        lucide.createIcons();
+        
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'language-select.html';
+        }
+    </script>
+</body>
+</html>
