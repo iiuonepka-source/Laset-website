@@ -18,6 +18,7 @@ async function initDatabase() {
     let retries = 5;
     while (retries > 0) {
         try {
+            // Create table
             await pool.query(`
                 CREATE TABLE IF NOT EXISTS users (
                     id SERIAL PRIMARY KEY,
@@ -29,6 +30,18 @@ async function initDatabase() {
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             `);
+            
+            // Add role column if it doesn't exist
+            await pool.query(`
+                ALTER TABLE users 
+                ADD COLUMN IF NOT EXISTS role VARCHAR(20) DEFAULT 'user'
+            `);
+            
+            // Set DEV user as admin by default
+            await pool.query(`
+                UPDATE users SET role = 'admin' WHERE username = 'DEV'
+            `);
+            
             console.log('Database initialized successfully');
             return;
         } catch (error) {
