@@ -43,13 +43,18 @@ router.post('/register', async (req, res) => {
         const clientIp = req.ip || req.connection.remoteAddress;
         
         // Check recent registrations from this IP (you can implement Redis for production)
-        const recentRegistrations = await pool.query(
-            `SELECT COUNT(*) as count FROM users 
-             WHERE created_at > NOW() - INTERVAL '1 hour'`
-        );
-        
-        if (recentRegistrations.rows[0].count > 5) {
-            return res.status(429).json({ error: 'Too many registration attempts. Please try again later.' });
+        try {
+            const recentRegistrations = await pool.query(
+                `SELECT COUNT(*) as count FROM users 
+                 WHERE created_at > NOW() - INTERVAL '1 hour'`
+            );
+            
+            if (recentRegistrations.rows[0].count > 5) {
+                return res.status(429).json({ error: 'Too many registration attempts. Please try again later.' });
+            }
+        } catch (dbError) {
+            console.error('Rate limit check failed:', dbError.message);
+            // Continue anyway if rate limit check fails
         }
 
         // Check if user exists
