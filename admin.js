@@ -4,9 +4,10 @@ let allUsers = [];
 
 async function checkAdminAccess() {
     const token = localStorage.getItem('token');
+    const adminAccess = sessionStorage.getItem('adminAccess');
     
     if (!token) {
-        window.location.href = 'auth.html';
+        window.location.href = 'auth';
         return false;
     }
 
@@ -23,7 +24,13 @@ async function checkAdminAccess() {
         
         if (data.user.role !== 'admin') {
             alert('Access denied. Admin only.');
-            window.location.href = 'dashboard.html';
+            window.location.href = 'dashboard';
+            return false;
+        }
+
+        // Check if admin password was entered
+        if (adminAccess !== 'granted') {
+            window.location.href = 'admin-auth';
             return false;
         }
 
@@ -32,7 +39,7 @@ async function checkAdminAccess() {
         console.error('Admin access check failed:', error);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        window.location.href = 'auth.html';
+        window.location.href = 'auth';
         return false;
     }
 }
@@ -118,6 +125,8 @@ function openEditModal(userId) {
     document.getElementById('editRole').value = user.role;
     document.getElementById('editSubscription').value = user.subscription_type;
     document.getElementById('editDays').value = '';
+    document.getElementById('editHWID').value = user.hwid || '';
+    document.getElementById('editStatus').value = user.status || 'active';
     
     document.getElementById('editModal').style.display = 'flex';
     lucide.createIcons();
@@ -135,6 +144,7 @@ async function saveUserChanges() {
     const role = document.getElementById('editRole').value;
     const subscriptionType = document.getElementById('editSubscription').value;
     const days = document.getElementById('editDays').value;
+    const newPassword = document.getElementById('newPassword').value;
     
     try {
         // Update role
@@ -160,6 +170,21 @@ async function saveUserChanges() {
                 days: days || 0
             })
         });
+        
+        // Reset password if provided
+        if (newPassword && newPassword.length >= 6) {
+            await fetch(`${API_URL}/admin/reset-password`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    userId: currentEditUserId, 
+                    newPassword 
+                })
+            });
+        }
         
         alert('User updated successfully!');
         closeEditModal();
