@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Access - Lasted Premium</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <div class="cursor-glow"></div>
+
+    <section class="auth-section">
+        <div class="auth-container">
+            <div class="logo-large">LASTED<span class="highlight">PREMIUM</span></div>
+            
+            <div class="admin-access-header">
+                <i data-lucide="shield-alert" style="width: 60px; height: 60px; color: #ff4444;"></i>
+                <h2>Admin Access Required</h2>
+                <p class="auth-subtitle">Enter secret password to continue</p>
+            </div>
+
+            <form id="adminAccessForm" class="auth-form">
+                <div class="form-group">
+                    <label>Secret Password</label>
+                    <input type="password" id="adminPassword" placeholder="Enter admin password" required autofocus>
+                </div>
+                
+                <div id="adminError" class="error-message"></div>
+                
+                <button type="submit" class="auth-btn">
+                    <i data-lucide="unlock"></i> Access Admin Panel
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <a href="dashboard">← Back to Dashboard</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+    <script>
+        const API_URL = window.location.origin + '/api/auth';
+        
+        document.getElementById('adminAccessForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('adminError');
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                window.location.href = 'auth';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/admin/verify-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    sessionStorage.setItem('adminAccess', 'granted');
+                    window.location.href = 'admin';
+                } else {
+                    errorDiv.textContent = data.error || 'Invalid password';
+                    errorDiv.style.display = 'block';
+                    document.getElementById('adminPassword').value = '';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Connection error. Please try again.';
+                errorDiv.style.display = 'block';
+            }
+        });
+        
+        lucide.createIcons();
+    </script>
+</body>
+</html>
