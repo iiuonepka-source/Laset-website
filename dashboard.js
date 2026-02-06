@@ -27,6 +27,14 @@ async function loadDashboard() {
         
         const createdDate = new Date(user.created_at).toLocaleDateString();
         document.getElementById('dashCreated').textContent = createdDate;
+        
+        // Show admin panel link if admin
+        if (user.role === 'admin') {
+            const adminLink = document.getElementById('adminLink');
+            if (adminLink) {
+                adminLink.style.display = 'inline-flex';
+            }
+        }
 
         // Update subscription info
         if (user.subscription_type && user.subscription_type !== 'none') {

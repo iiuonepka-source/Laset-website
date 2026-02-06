@@ -240,3 +240,81 @@ window.onclick = function(event) {
         closeEditModal();
     }
 }
+
+function showAntiLeakPanel() {
+    alert('Anti-Leak monitoring is active. Check user HWID and status columns for leaked accounts.');
+}
+
+function showBulkActions() {
+    alert('Bulk actions: Select multiple users to perform actions. Feature coming soon.');
+}
+
+function exportUsers() {
+    if (allUsers.length === 0) {
+        alert('No users to export');
+        return;
+    }
+
+    const csv = [
+        ['ID', 'Username', 'Email', 'Role', 'Subscription', 'Expires', 'HWID', 'Status', 'Created'].join(','),
+        ...allUsers.map(user => [
+            user.id,
+            user.username,
+            user.email,
+            user.role,
+            user.subscription_type || 'none',
+            user.subscription_expires ? new Date(user.subscription_expires).toLocaleDateString() : '-',
+            user.hwid || '-',
+            user.status || 'active',
+            new Date(user.created_at).toLocaleDateString()
+        ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `users_export_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
+async function clearLeakedAccounts() {
+    if (!confirm('Are you sure you want to delete all leaked accounts? This action cannot be undone.')) {
+        return;
+    }
+
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch(`${API_URL}/admin/clear-leaked`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to clear leaked accounts');
+        }
+
+        alert('Leaked accounts cleared successfully!');
+        loadUsers();
+    } catch (error) {
+        console.error('Clear leaked error:', error);
+        alert('Failed to clear leaked accounts');
+    }
+}
+
+function updateStats(users) {
+    document.getElementById('totalUsers').textContent = users.length;
+    
+    const activeSubscriptions = users.filter(u => 
+        u.subscription_expires && new Date(u.subscription_expires) > new Date()
+    ).length;
+    document.getElementById('activeSubscriptions').textContent = activeSubscriptions;
+    
+    const adminCount = users.filter(u => u.role === 'admin').length;
+    document.getElementById('adminCount').textContent = adminCount;
+    
+    const leakedCount = users.filter(u => u.status === 'leaked').length;
+    document.getElementById('leakedCount').textContent = leakedCount;
+}
