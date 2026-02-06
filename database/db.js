@@ -31,10 +31,13 @@ async function initDatabase() {
                 )
             `);
             
-            // Add role column if it doesn't exist
+            // Add all new columns if they don't exist
             await pool.query(`
                 ALTER TABLE users 
-                ADD COLUMN IF NOT EXISTS role VARCHAR(20) DEFAULT 'user'
+                ADD COLUMN IF NOT EXISTS role VARCHAR(20) DEFAULT 'user',
+                ADD COLUMN IF NOT EXISTS hwid VARCHAR(255),
+                ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'active',
+                ADD COLUMN IF NOT EXISTS last_login TIMESTAMP
             `);
             
             // Set DEV user as admin by default
