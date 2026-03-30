@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С Днем рождения, мама</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Playfair+Display:wght@500;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+    <main class="page">
+        <div class="bg-orb orb-1" aria-hidden="true"></div>
+        <div class="bg-orb orb-2" aria-hidden="true"></div>
+        <div class="bg-orb orb-3" aria-hidden="true"></div>
+        <div class="sparkles" id="sparkles" aria-hidden="true"></div>
+
+        <section class="card hero">
+            <p class="kicker">Для самой любимой</p>
+            <h1>С Днем рождения, мама!</h1>
+            <p class="subtitle">Ты мой свет, опора и самое доброе сердце в мире.</p>
+
+            <p id="typewriter" class="typewriter" aria-live="polite"></p>
+
+            <button id="fireworkBtn" class="cta" type="button">Запустить праздничный салют</button>
+        </section>
+
+        <section class="card wishes">
+            <h2>Мои пожелания для тебя</h2>
+            <div class="wishes-grid">
+                <article>
+                    <h3>Здоровья</h3>
+                    <p>Пусть каждый день приносит силы, энергию и улыбку.</p>
+                </article>
+                <article>
+                    <h3>Радости</h3>
+                    <p>Пусть в доме всегда будет тепло, смех и уют.</p>
+                </article>
+                <article>
+                    <h3>Мечты</h3>
+                    <p>Пусть исполняется все, что тебе по-настоящему дорого.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="card quote">
+            <p>Спасибо за твою заботу, любовь и бесконечную доброту. Очень тебя люблю.</p>
+            <span>С любовью, Платон</span>
+        </section>
+
+        <section class="card game">
+            <h2>Мини-игра для мамы: Поймай сердечки</h2>
+            <p class="game-subtitle">У тебя есть 30 секунд. Нажимай на сердечко как можно быстрее.</p>
+
+            <div class="game-panel" aria-live="polite">
+                <span>Счет: <strong id="scoreValue">0</strong></span>
+                <span>Время: <strong id="timeValue">30</strong> сек</span>
+                <span>Рекорд: <strong id="bestValue">0</strong></span>
+            </div>
+
+            <div id="gameField" class="game-field">
+                <button id="heartTarget" class="heart-target" type="button" aria-label="Сердечко">❤</button>
+                <div id="gameOverlay" class="game-overlay">Нажми кнопку «Начать игру»</div>
+            </div>
+
+            <button id="startGameBtn" class="cta game-btn" type="button">Начать игру</button>
+        </section>
+    </main>
+
+    <script src="./script.js"></script>
+</body>
+</html>
