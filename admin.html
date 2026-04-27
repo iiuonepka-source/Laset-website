@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Terminal Ghost Admin</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <section id="login-view" class="login-view">
+      <form id="login-form" class="login-panel">
+        <div>
+          <p class="eyebrow">Admin Access</p>
+          <h1>Terminal Ghost</h1>
+        </div>
+        <label class="field">
+          <span>Admin key</span>
+          <input id="admin-key" type="password" autocomplete="current-password" placeholder="TG-XXXX..." required>
+        </label>
+        <button class="button primary" type="submit">Войти</button>
+        <p id="login-error" class="error" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="dashboard-view" class="dashboard hidden">
+      <aside class="sidebar">
+        <div>
+          <p class="eyebrow">Panel</p>
+          <h2>Admin</h2>
+        </div>
+        <nav>
+          <a href="#users" class="nav-link active">Пользователи</a>
+          <a href="#sessions" class="nav-link">Активные</a>
+          <a href="#create" class="nav-link">Создать</a>
+        </nav>
+        <button id="logout-button" class="button ghost" type="button">Выйти</button>
+      </aside>
+
+      <section class="content">
+        <header class="content-header">
+          <div>
+            <h1>Управление доступом</h1>
+            <p>Подписки, роли и активные сессии клиента.</p>
+          </div>
+          <button id="refresh-button" class="button" type="button">Обновить</button>
+        </header>
+
+        <section class="stats-grid" aria-label="Статистика">
+          <article class="stat">
+            <span>Всего</span>
+            <strong id="stat-users">0</strong>
+          </article>
+          <article class="stat">
+            <span>Активны</span>
+            <strong id="stat-active">0</strong>
+          </article>
+          <article class="stat">
+            <span>Beta</span>
+            <strong id="stat-beta">0</strong>
+          </article>
+          <article class="stat">
+            <span>Без доступа</span>
+            <strong id="stat-disabled">0</strong>
+          </article>
+        </section>
+
+        <section id="create" class="panel">
+          <div class="panel-head">
+            <h2>Создать пользователя</h2>
+          </div>
+          <form id="create-user-form" class="create-grid">
+            <label class="field">
+              <span>Логин</span>
+              <input id="new-login" type="text" autocomplete="off" placeholder="nickname" required>
+            </label>
+            <label class="field">
+              <span>Дней подписки</span>
+              <input id="new-days" type="number" min="1" max="3650" value="30" required>
+            </label>
+            <label class="checkbox">
+              <input id="new-beta" type="checkbox">
+              <span>Роль beta</span>
+            </label>
+            <button class="button primary" type="submit">Создать</button>
+          </form>
+          <p id="new-user-key" class="copy-output"></p>
+        </section>
+
+        <section id="sessions" class="panel">
+          <div class="panel-head">
+            <h2>Активные пользователи</h2>
+            <span id="sessions-updated" class="muted"></span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Логин</th>
+                  <th>Игра</th>
+                  <th>Версия</th>
+                  <th>HWID</th>
+                  <th>IP</th>
+                  <th>Последний сигнал</th>
+                </tr>
+              </thead>
+              <tbody id="sessions-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="users" class="panel">
+          <div class="panel-head">
+            <h2>Аккаунты</h2>
+            <input id="user-filter" class="search" type="search" placeholder="Поиск логина">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Логин</th>
+                  <th>Роли</th>
+                  <th>Подписка</th>
+                  <th>Активные</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody id="users-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script src="admin.js"></script>
+</body>
+</html>

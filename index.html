@@ -1,75 +1,112 @@
-﻿<!DOCTYPE html>
-<html lang="ru">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>С Днем рождения, мама</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Playfair+Display:wght@500;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Terminal Ghost</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+  <header class="topbar">
+    <div class="brand">Terminal Ghost</div>
+    <nav class="nav">
+      <a class="nav-link active" href="index.html">Home</a>
+      <a class="nav-link" href="faq.html">FAQ</a>
+      <a class="nav-link" href="eula.html">EULA</a>
+    </nav>
+  </header>
 
-    <main class="page">
-        <div class="bg-orb orb-1" aria-hidden="true"></div>
-        <div class="bg-orb orb-2" aria-hidden="true"></div>
-        <div class="bg-orb orb-3" aria-hidden="true"></div>
-        <div class="sparkles" id="sparkles" aria-hidden="true"></div>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-left">
+        <p class="eyebrow">External Product</p>
+        <h1>terminal best solution in minecraft</h1>
+        <p class="subtitle">
+          Stable external loader with clean workflow and fast setup.
+        </p>
+        <a class="btn primary" href="#pricing">Buy Product</a>
+      </div>
 
-        <section class="card hero">
-            <p class="kicker">Для самой любимой</p>
-            <h1>С Днем рождения, мама!</h1>
-            <p class="subtitle">Ты мой свет, опора и самое доброе сердце в мире.</p>
+      <div class="hero-right">
+        <div class="loader-demo">
+          <div class="loader-titlebar">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="loader-title">Terminal external</span>
+          </div>
+          <div class="loader-body">
+            <aside class="panel">
+              <div class="panel-item" data-step="0">Settings</div>
+              <div class="panel-item" data-step="1">Theme</div>
+              <div class="panel-item" data-step="2">Start</div>
+              <div class="panel-item" data-step="3">Process</div>
+            </aside>
+            <section class="preview">
+              <div class="status" id="demo-status">Open settings...</div>
+              <div class="terminal-line">
+                <span class="prompt">&gt;</span>
+                <span id="typed-command"></span><span class="cursor">_</span>
+              </div>
+              <div class="process-list" id="process-list">
+                <div class="process">javaw.exe</div>
+                <div class="process">Minecraft.Windows.exe</div>
+                <div class="process">lunarclient.exe</div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <p id="typewriter" class="typewriter" aria-live="polite"></p>
+    <section id="pricing" class="pricing">
+      <h2>Plans</h2>
+      <p class="muted">Choose your access period.</p>
+      <div class="cards">
+        <article class="card">
+          <h3>7 Days</h3>
+          <p class="price">$4.99</p>
+          <button class="btn">Buy Product</button>
+        </article>
+        <article class="card">
+          <h3>14 Days</h3>
+          <p class="price">$7.99</p>
+          <button class="btn">Buy Product</button>
+        </article>
+        <article class="card">
+          <h3>30 Days</h3>
+          <p class="price">$11.99</p>
+          <button class="btn">Buy Product</button>
+        </article>
+        <article class="card">
+          <h3>40 Days</h3>
+          <p class="price">$14.99</p>
+          <button class="btn">Buy Product</button>
+        </article>
+        <article class="card">
+          <h3>90 Days</h3>
+          <p class="price">$24.99</p>
+          <button class="btn">Buy Product</button>
+        </article>
+        <article class="card">
+          <h3>365 Days</h3>
+          <p class="price">$44.99</p>
+          <button class="btn">Buy Product</button>
+        </article>
+        <article class="card lifetime">
+          <h3>Lifetime</h3>
+          <p class="price">$59.99</p>
+          <button class="btn primary">Buy Product</button>
+        </article>
+      </div>
+    </section>
+  </main>
 
-            <button id="fireworkBtn" class="cta" type="button">Запустить праздничный салют</button>
-        </section>
+  <footer class="footer">
+    <span>Terminal Ghost</span>
+    <span>support@terminalghost.example</span>
+  </footer>
 
-        <section class="card wishes">
-            <h2>Мои пожелания для тебя</h2>
-            <div class="wishes-grid">
-                <article>
-                    <h3>Здоровья</h3>
-                    <p>Пусть каждый день приносит силы, энергию и улыбку.</p>
-                </article>
-                <article>
-                    <h3>Радости</h3>
-                    <p>Пусть в доме всегда будет тепло, смех и уют.</p>
-                </article>
-                <article>
-                    <h3>Мечты</h3>
-                    <p>Пусть исполняется все, что тебе по-настоящему дорого.</p>
-                </article>
-            </div>
-        </section>
-
-        <section class="card quote">
-            <p>Спасибо за твою заботу, любовь и бесконечную доброту. Очень тебя люблю.</p>
-            <span>С любовью, Платон</span>
-        </section>
-
-        <section class="card game">
-            <h2>Мини-игра для мамы: Поймай сердечки</h2>
-            <p class="game-subtitle">У тебя есть 30 секунд. Нажимай на сердечко как можно быстрее.</p>
-
-            <div class="game-panel" aria-live="polite">
-                <span>Счет: <strong id="scoreValue">0</strong></span>
-                <span>Время: <strong id="timeValue">30</strong> сек</span>
-                <span>Рекорд: <strong id="bestValue">0</strong></span>
-            </div>
-
-            <div id="gameField" class="game-field">
-                <button id="heartTarget" class="heart-target" type="button" aria-label="Сердечко">❤</button>
-                <div id="gameOverlay" class="game-overlay">Нажми кнопку «Начать игру»</div>
-            </div>
-
-            <button id="startGameBtn" class="cta game-btn" type="button">Начать игру</button>
-        </section>
-    </main>
-
-    <script src="./script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
