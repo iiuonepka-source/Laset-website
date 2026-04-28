@@ -364,11 +364,6 @@ function postgresStorage(pool) {
     name: "postgres",
     async init() {
       await pool.query(`
-        -- Force schema reset to fix incompatible types (integer vs uuid)
-        DROP TABLE IF EXISTS sessions CASCADE;
-        DROP TABLE IF EXISTS users CASCADE;
-        DROP TABLE IF EXISTS audit CASCADE;
-
         create table if not exists users (
           id uuid primary key,
           login text not null unique,
@@ -405,6 +400,35 @@ function postgresStorage(pool) {
 
         create index if not exists sessions_last_seen_idx on sessions(last_seen_at);
         create index if not exists sessions_user_id_idx on sessions(user_id);
+      `);
+
+      await pool.query(`
+        alter table users
+          add column if not exists access_key_hash text,
+          add column if not exists roles jsonb not null default '["user"]'::jsonb,
+          add column if not exists disabled boolean not null default false,
+          add column if not exists created_at timestamptz not null default now(),
+          add column if not exists updated_at timestamptz not null default now(),
+          add column if not exists subscription_expires_at timestamptz,
+          add column if not exists last_seen_at timestamptz,
+          add column if not exists hwid text;
+
+        alter table sessions
+          add column if not exists token_hash text,
+          add column if not exists user_id text,
+          add column if not exists hardware_id text,
+          add column if not exists client_version text,
+          add column if not exists game text,
+          add column if not exists status text not null default 'online',
+          add column if not exists ip text,
+          add column if not exists created_at timestamptz not null default now(),
+          add column if not exists last_seen_at timestamptz not null default now();
+
+        alter table audit
+          add column if not exists action text,
+          add column if not exists details jsonb not null default '{}'::jsonb,
+          add column if not exists ip text,
+          add column if not exists created_at timestamptz not null default now();
       `);
 
       await pool.query(`
