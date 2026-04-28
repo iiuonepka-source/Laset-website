@@ -316,6 +316,16 @@ function jsonStorage() {
       addJsonAudit(store, "user.reset_hwid", { login: user.login }, req);
       saveJsonStore(store);
       return user;
+    },
+    async bindHwid(id, hwid, req) {
+      const store = loadJsonStore();
+      const user = store.users.find((item) => item.id === id);
+      if (!user) return null;
+      user.hwid = String(hwid || "").slice(0, 128);
+      user.updatedAt = nowIso();
+      addJsonAudit(store, "user.bind_hwid", { login: user.login, hwid: user.hwid }, req);
+      saveJsonStore(store);
+      return user;
     }
   };
 }
@@ -556,6 +566,13 @@ function postgresStorage(pool) {
       if (!rows[0]) return null;
       const user = normalizeUser(rows[0]);
       await audit("user.reset_hwid", { login: user.login }, req);
+      return user;
+    },
+    async bindHwid(id, hwid, req) {
+      const { rows } = await pool.query("update users set hwid = $2, updated_at = now() where id = $1 returning *", [id, String(hwid || "").slice(0, 128)]);
+      if (!rows[0]) return null;
+      const user = normalizeUser(rows[0]);
+      await audit("user.bind_hwid", { login: user.login, hwid }, req);
       return user;
     }
   };
@@ -823,10 +840,7 @@ async function handleApi(req, res, storage) {
       return;
     }
     if (!user.hwid && hardwareId) {
-      // Auto-bind if not bound yet? No, user said registration binds it.
-      // But if it was reset, we might want to re-bind on next login.
-      // However, the request says "после регистрации... идет привязка".
-      // Let's stick to checking if it matches.
+      await storage.bindHwid(user.id, hardwareId, req);
     }
     if (!(user.roles || []).includes("beta")) {
       sendJson(res, 403, { ok: false, error: "Beta access required" });
